@@ -1,0 +1,8 @@
+{
+    "require": {
+        "spatie/laravel-backup": "^8.1",
+        "symfony/process": "^6.1",
+        "spatie/flysystem-dropbox": "^2.0",
+        "league/flysystem-webdav": "^3.7"
+    }
+}

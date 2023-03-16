@@ -1,0 +1,102 @@
+<div class="control-list">
+    <table class="table data">
+        <thead>
+        <tr>
+            <th><span>Name</span></th>
+            <th><span>Storage</span></th>
+            <th><span>Size</span></th>
+            <th><span>Last Modified</span></th>
+            <th><span>Action</span></th>
+            <th><span>Delete</span></th>
+        </tr>
+        </thead>
+        <tbody>
+        <?php if (empty($backupFiles) && empty($oldPathBackupFiles)): ?>
+            <tr class="no-data">
+                <td colspan="100" class="nolink">
+                    <p class="no-data">
+                        There are no any backups yet.
+                    </p>
+                </td>
+            </tr>
+        <?php else: ?>
+            <?php foreach ($oldPathBackupFiles as $file): ?>
+                <tr>
+                    <td><?=$file['fileInfo']['basename']?></td>
+                    <td><?=$file['storage']?></td>
+                    <td><?=$file['size']?>KB</td>
+                    <td><?=$file['lastModified']?></td>
+                    <td class="column-button nolink">
+                        <a
+                            <?php if ($file['storage'] === 'Local'): ?>
+                                href="/storage/app/gviabcua-backup/<?=$file['fileInfo']['basename']?>"
+                            <?php else: ?>
+                                href="<?=Backend::url('gviabcua/backup/backups/downloadDropboxBackup/'.$file['fileInfo']['basename'])?>"
+                            <?php endif ?>
+                                class="btn btn-success btn-sm">
+                            Download
+                        </a>
+                    </td>
+                    <td class="column-button nolink">
+                    	<?php if ($file['storage'] === 'Local'): ?>
+                            <button class='btn btn-danger btn-sm'
+									data-request='onDeleteBackupOld' 
+									data-attach-loading
+									data-request-flash
+									data-request-confirm="Delete backup?"
+									data-request-data ="file: '<?= $file['fileInfo']['basename']?>'"
+									>Delete</button>
+                        <?php endif ?>
+                        
+                    </td>
+                </tr>
+            <?php endforeach ?>
+            <?php foreach ($backupFiles as $file): ?>
+                <tr>
+                    <td><?=$file['fileInfo']['basename']?></td>
+                    <td><?=$file['storage']?></td>
+                    <td><?=$file['size']?>KB</td>
+                    <td><?=$file['lastModified']?></td>
+                    <td class="column-button nolink">
+
+                        <?php if ($file['storage'] === 'Local'): ?>
+                            <a
+                              href="/storage/app/uploads/gviabcua-backup/<?=$file['fileInfo']['basename']?>"
+                              class="btn btn-success btn-sm">
+                              Download
+                            </a>
+                        <?php endif ?>
+                        <?php if ($file['storage'] === 'Webdav'): ?>
+                            <a
+                              download="<?=$file['fileInfo']['basename']?>"
+                              href="<?=Backend::url('gviabcua/backup/backups/downloadWebdavBackup/'.$file['fileInfo']['basename'])?>"
+                              class="btn btn-success btn-sm">
+                              Download
+                            </a>
+                        <?php endif ?>
+                        <?php if ($file['storage'] === 'Dropbox'): ?>
+                            <a
+                            href="<?=Backend::url('gviabcua/backup/backups/downloadDropboxBackup/'.$file['fileInfo']['basename'])?>"
+                              class="btn btn-success btn-sm">
+                              Download
+                            </a>
+                        <?php endif ?>
+                    </td>
+                    <td class="column-button nolink">
+                    	<?php if ($file['storage'] === 'Local'): ?>
+                    	<button class='btn btn-danger btn-sm'
+									data-request='onDeleteBackup' 
+									data-attach-loading
+									data-request-flash
+									data-request-confirm="Delete backup?"
+									data-request-data ="file: '<?= $file['fileInfo']['basename']?>'"
+									>Delete</button>
+                            
+                        <?php endif ?>
+                    </td>
+                </tr>
+            <?php endforeach ?>
+        <?php endif ?>
+        </tbody>
+    </table>
+</div>
